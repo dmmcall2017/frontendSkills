@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>粒子动画</title>
+    <script src="js/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+    <canvas id="myCanvas" width="800" height="400"></canvas>
+    <script>
+        (function(){
+            //获取canvas元素
+            var canvas = $("#myCanvas")[0],ctx;
+            if(canvas.getContext){
+                ctx = canvas.getContext("2d")
+            }
+
+            //新建一个image对象
+            var image = new Image();
+            image.src = "./images/sourceImg.png";
+            var test;
+            image.onload = function(){
+                ctx.drawImage(image,100,100);
+                test = ctx.getImageData(100,100,300,300).data
+            }
+            console.log(test)
+
+            //获取图片的像素数据
+            var imageData = ctx.getImageData(100,100,300,300);
+            
+            //获取要绘图的坐标
+            var particles = [];
+            calculate()
+            draw();
+
+            //计算并保存坐标
+            function calculate(){
+                var len = imageData.data.length;
+                //设成100行，100列
+                var cols = 100,
+                    rows = 100;
+                //设成100行，100列后每个单元格的宽高
+                var s_width = parseInt(imageData.width/cols),
+                    s_height = parseInt(imageData.height/rows);
+                var pos = 0;
+                var par_x,par_y;//粒子的x，y坐标
+                var data = imageData.data;
+                console.log(data)
+                for(var i=1;i<=cols;i++){
+                    for(var j=1;j<=rows;j++){
+                        pos = [(j*s_height - 1)*image.w + (i*s_width -1)] *4;
+                        //判断R值是否符合要求
+                        
+                        // if(data[pos] > 250){
+                            var particle = {
+                                //增加偏移量
+                                x: i*s_width + (Math.random()-0.5)*20,
+                                y: j*s_height + (Math.random()-0.5)*20,
+                                fillStyle: '#006eff'
+                            }
+                            particles.push(particle)
+                        // }
+                    }
+                }
+            }
+            //绘图
+            function draw(){
+                //清空画布
+                ctx.clearRect(0,0,800,400);
+                var len = particles.length,curr_particle = null;
+                console.log(len)
+                // for(var i=0;i<len;i++){
+                //     curr_particle = particles[i];
+                //     //填充颜色
+                //     ctx.fillStyle = curr_particle.fillStyle;
+                //     //绘制粒子到画布
+                //     ctx.fillRect(curr_particle.x,curr_particle.y,1,1);
+                // }
+            }
+        }())
+    </script>
+</body>
+</html>

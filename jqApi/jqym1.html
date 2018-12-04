@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery-2.0.3.js"></script>
+
+</head>
+<body>
+    <div id="log"></div>
+    <script>
+        var log = function( value ){
+            $("#log").append( "<p>" + value + "</p>" );
+        };
+
+        var foo = function( value ){
+            log( "foo: " + value );
+        };
+        var bar = function( value ){
+            log( "bar: " + value );
+        };
+
+        var callbacks = $.Callbacks( "memory" );
+        callbacks.add( foo );
+        callbacks.fire( "hello" );
+
+        callbacks.disable();
+        callbacks.fire( "world" );
+
+        callbacks.add( foo );
+        callbacks.fire( "silentArgument" );
+
+        callbacks.add(bar);
+        callbacks.fire( "youHadMeAtHello" );
+
+    </script>
+</body>
+</html>
