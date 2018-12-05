@@ -33,27 +33,22 @@
     }
 //如果window未定义，传this作为参数
 } )( typeof window !== "undefined" ? window : this, function( window, noGlobal ) {
+    var arr = [],
+        
+        support = {},
+        document = window.document,
+        slice = [].slice;
 
-    var arr = [];
-
-    var document = window.document;
-
-    var slice = [].slice;
 
     var version = "1.0.1",
-
         jQuery = function( selector, context ) {
-
         //初始化jQuery对象的构造器
         return new jQuery.fn.init( selector, context );
     };
-
     jQuery.fn = jQuery.prototype = {
         //当前版本号
         jquery: version,
-
         constructor: jQuery,
-
         //定义length属性，便于转化为类数组
         /**
          * 对象转换为数组的条件：
@@ -61,21 +56,65 @@
          *  key值必须为数字或者数字字符串
          */
         length: 0,
-
         toArray: function() {
             return slice.call( this );
+        },
+
+        makeArray: function( arr, results) {
+            var ret = results || [];
+
+            if( arr != null ) {
+                if( isArrayLike( Object( arr ) ) ) {
+
+                }
+            }
+        }
+    }
+
+    support.createHTMLDocument = ( function() {
+        var body = document.implementation.createHTMLDocument( "" ).body;
+        body.innerHTML = "<form></form><form></form>";
+        return body.childNodes.length === 2;
+    } )();
+
+    
+    jQuery.parseHTML = function( data, context, keepScripts ) {
+        if( typeof data !== "string" ) {
+            return [];
+        }
+        if( typeof context === "boolean" ) {
+            keepScripts = context;
+            context = false;
         }
 
+        var base, parsed, scripts;
+
+        if( !context ) {
+            if ( support.createHTMLDocument ) {
+                context = document.implementation.createHTMLDocument( "" );
+    
+                // Set the base href for the created document
+                // so any parsed elements with URLs
+                // are based on the document's URL (gh-2965)
+                base = context.createElement( "base" );
+                base.href = document.location.href;
+                context.head.appendChild( base );
+            } else {
+                context = document;
+            }
+        }
 
     }
 
     //初始化jQuery对象
-    //正则：安全校验（#id 防止通过url的hash进行XSS攻击
-    var rquickExpr;
-    var init = function( selector, context, root ) {
+    var rootjQuery,
+    //正则：安全校验（#id和html标签） 防止通过url的hash进行XSS攻击
+
+    
+        rquickExpr = /^(?:\s*(<[\w\W]+>)[^>]*|#([\w-]+))$/,
+    init = jQuery.fn.init = function( selector, context, root ) {
 
         var match, elem;
-
         //如果选择器是字符串
         if( typeof selector === "string" ) {
             if( selector[0] === "<" && selector[selector.length-1] === ">" && selector.length >= 3) {
@@ -83,9 +122,16 @@
             }else {
                 match = rquickExpr.exec( selector );
             }
+            if( match && ( match[ 1 ] || !context )) {
+                if( match[1] ){
+                    context = context instanceof jQuery ? context[ 0 ] : context;
+                    // jQuery.merge( this, )
+                }
+            }
         }
     }
 
+    init.prototype = jQuery.fn;
     if(!noGlobal){
         window.jQuery = window.$ = jQuery;
     }
