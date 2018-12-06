@@ -7067,10 +7067,11 @@ function propFilter( props, specialEasing ) {
 }
 
 function Animation( elem, properties, options ) {
+	console.log( elem, properties, options)
 	var result,
 		stopped,
 		index = 0,
-		length = Animation.prefilters.length,
+		length = Animation.prefilters.length,//prefilters：前置过滤器
 		deferred = jQuery.Deferred().always( function() {
 
 			// Don't match elem in the :animated selector
@@ -7084,7 +7085,7 @@ function Animation( elem, properties, options ) {
 				remaining = Math.max( 0, animation.startTime + animation.duration - currentTime ),
 
 				// Support: Android 2.3 only
-				// Archaic crash bug won't allow us to use `1 - ( 0.5 || 0 )` (#12497)
+				// Archaic crash bug won't allow us to use `1 - ( 0.5 || 0	 )` (#12497)
 				temp = remaining / animation.duration || 0,
 				percent = 1 - temp,
 				index = 0,
@@ -7289,6 +7290,7 @@ jQuery.fn.extend( {
 			optall = jQuery.speed( speed, easing, callback ),
 			doAnimation = function() {
 
+				console.log(optall)
 				// Operate on a copy of prop so per-property easing won't be lost
 				var anim = Animation( this, jQuery.extend( {}, prop ), optall );
 
@@ -7416,6 +7418,7 @@ jQuery.each( {
 	fadeOut: { opacity: "hide" },
 	fadeToggle: { opacity: "toggle" }
 }, function( name, props ) {
+	// console.log(name,"\n", props)
 	jQuery.fn[ name ] = function( speed, easing, callback ) {
 		return this.animate( props, speed, easing, callback );
 	};
