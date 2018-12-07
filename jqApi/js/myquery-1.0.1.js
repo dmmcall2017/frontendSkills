@@ -11,7 +11,7 @@
  * Date: 2018-12-04
  */
 //匿名函数，立即执行,独立作用域
-(function( global, factory ) {
+(function (global, factory) {
     /**
      * 判断当前的运行环境
      * 1、浏览器换环境：生成jQuery对象，作为window对象的属性
@@ -19,32 +19,55 @@
      */
 
 
-    if(typeof module === "object" && typeof module.exports === "object"){
+    if (typeof module === "object" && typeof module.exports === "object") {
         module.exports = global.document ?
-            factory(global, true) : 
-            function( w ) {
-                if( !w.document ) {
-                    throw new Error( "jQuery requires a window with a document" );
+            factory(global, true) :
+            function (w) {
+                if (!w.document) {
+                    throw new Error("jQuery requires a window with a document");
                 }
-                return factory( w );
+                return factory(w);
             };
     } else {
-        factory( global );
+        factory(global);
     }
-//如果window未定义，传this作为参数
-} )( typeof window !== "undefined" ? window : this, function( window, noGlobal ) {
+    //如果window未定义，传this作为参数
+})(typeof window !== "undefined" ? window : this, function (window, noGlobal) {
     var arr = [],
-        
+
         support = {},
         document = window.document,
-        slice = [].slice;
+        slice = [].slice
+        // https://zhuanlan.zhihu.com/p/21403405
+        //扩展js本身的typeof（如获取Object类型的具体类型值）
+        class2type = {};
+
+    var isFunction = function isFunction ( obj ) {
+        return typeof obj === "function" && typeof obj.nodeType !== "number";
+    }
+
+    //["window","top","self","parent"]
+    var isWindow = function isWindow( obj ) {
+        return obj != null && obj === obj.window;
+    }
+
+    function toType(obj) {
+		if (obj == null) {
+			return obj + "";
+		}
+
+		// Support: Android <=2.3 only (functionish RegExp)
+		return typeof obj === "object" || typeof obj === "function" ?
+			class2type[toString.call(obj)] || "object" :
+			typeof obj;
+	}
 
 
     var version = "1.0.1",
-        jQuery = function( selector, context ) {
-        //初始化jQuery对象的构造器
-        return new jQuery.fn.init( selector, context );
-    };
+        jQuery = function (selector, context) {
+            //初始化jQuery对象的构造器
+            return new jQuery.fn.init(selector, context);
+        };
     jQuery.fn = jQuery.prototype = {
         //当前版本号
         jquery: version,
@@ -56,21 +79,11 @@
          *  key值必须为数字或者数字字符串
          */
         length: 0,
-        toArray: function() {
-            return slice.call( this );
-        },
-
-        makeArray: function( arr, results) {
-            var ret = results || [];
-
-            if( arr != null ) {
-                if( isArrayLike( Object( arr ) ) ) {
-
-                }
-            }
+        toArray: function () {
+            return slice.call(this);
         }
     }
-
+    //jQuery和jQuery.fn上的扩展函树????
     jQuery.extend = jQuery.fn.extend = function() {
         var options, name, src, copy, copyIsArray, clone,
             target = arguments[ 0 ] || {},
@@ -78,7 +91,7 @@
             length = arguments.length,
             deep = false;
     
-        //处理深拷贝
+        // Handle a deep copy situation
         if ( typeof target === "boolean" ) {
             deep = target;
     
@@ -140,34 +153,66 @@
         return target;
     };
 
-    support.createHTMLDocument = ( function() {
-        var body = document.implementation.createHTMLDocument( "" ).body;
+    jQuery.extend({
+        //简单的数组拼接，第二个可以是类数组类型（key是数字或数字字符串，必须有length属性）
+        merge: function( first, second ) {
+            var len = second.length,
+                i = first.length,
+                j = 0;
+
+            for( ; j < len; j++ ){
+                first[i++] = second[j];
+            }
+            first.length = i;
+            return first;
+        }
+    })
+
+    function isArrayLike(obj) {
+
+		// Support: real iOS 8.2 only (not reproducible in simulator)
+		// `in` check used to prevent JIT error (gh-2145)
+		// hasOwn isn't used here due to false negatives
+		// regarding Nodelist length in IE
+		var length = !!obj && "length" in obj && obj.length,
+			type = toType(obj);
+
+		if (isFunction(obj) || isWindow(obj)) {
+			return false;
+		}
+
+		return type === "array" || length === 0 ||
+			typeof length === "number" && length > 0 && (length - 1) in obj;
+	}
+
+    support.createHTMLDocument = (function () {
+        var body = document.implementation.createHTMLDocument("").body;
         body.innerHTML = "<form></form><form></form>";
         return body.childNodes.length === 2;
-    } )();
+    })();
 
 
-    jQuery.parseHTML = function( data, context, keepScripts ) {
-        if( typeof data !== "string" ) {
+    jQuery.parseHTML = function (data, context, keepScripts) {
+        if (typeof data !== "string") {
             return [];
         }
-        if( typeof context === "boolean" ) {
+        if (typeof context === "boolean") {
             keepScripts = context;
             context = false;
         }
 
         var base, parsed, scripts;
 
-        if( !context ) {
-            if ( support.createHTMLDocument ) {
-                context = document.implementation.createHTMLDocument( "" );
-    
+        if (!context) {
+            if (support.createHTMLDocument) {
+                context = document.implementation.createHTMLDocument("");
+
                 // Set the base href for the created document
                 // so any parsed elements with URLs
                 // are based on the document's URL (gh-2965)
-                base = context.createElement( "base" );
+                base = context.createElement("base");
                 base.href = document.location.href;
-                context.head.appendChild( base );
+                context.head.appendChild(base);
             } else {
                 context = document;
             }
@@ -175,35 +220,42 @@
 
     }
 
+    
 
 
     //初始化jQuery对象
     var rootjQuery,
-    //正则：安全校验（#id和html标签） 防止通过url的hash进行XSS攻击
-
-    
+        //正则：安全校验（#id和html标签） 防止通过url的hash进行XSS攻击
+        //正则返回结果，数组第一个值是第一个匹配的结果，之后每一个括号匹配一次
         rquickExpr = /^(?:\s*(<[\w\W]+>)[^>]*|#([\w-]+))$/,
-    init = jQuery.fn.init = function( selector, context, root ) {
 
-        var match, elem;
-        //如果选择器是字符串
-        if( typeof selector === "string" ) {
-            if( selector[0] === "<" && selector[selector.length-1] === ">" && selector.length >= 3) {
-                match = [null, selector, null];
-            }else {
-                match = rquickExpr.exec( selector );
-            }
-            if( match && ( match[ 1 ] || !context )) {
-                if( match[1] ){
-                    context = context instanceof jQuery ? context[ 0 ] : context;
-                    // jQuery.merge( this, )
+        init = jQuery.fn.init = function (selector, context, root) {
+            var match, elem;
+            //如果选择器是字符串
+            if (typeof selector === "string") {
+                if (selector[0] === "<" && selector[selector.length - 1] === ">" && selector.length >= 3) {
+                    match = [null, selector, null];
+                } else {
+                    match = rquickExpr.exec(selector);
+                }
+                if (match && (match[1] || !context)) {
+                    
+                    if (match[1]) {//匹配html Tag
+                        
+                    } else {
+                        elem = document.getElementById(match[2]);
+                        if (elem) {//把dom添加到jQuery对象上，length+1;
+                            this[0] = elem;
+                            this.length = 1;
+                        }
+                        return jQuery.merge([],this);
+                    }
                 }
             }
         }
-    }
 
     init.prototype = jQuery.fn;
-    if(!noGlobal){
+    if (!noGlobal) {
         window.jQuery = window.$ = jQuery;
     }
 });
