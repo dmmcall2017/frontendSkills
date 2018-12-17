@@ -83,7 +83,7 @@
             return slice.call(this);
         }
     }
-    //jQuery和jQuery.fn上的扩展函树????
+    //jQuery和jQuery.fn上的扩展函数
     jQuery.extend = jQuery.fn.extend = function() {
         var options, name, src, copy, copyIsArray, clone,
             target = arguments[ 0 ] || {},

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./js/jquery-3.3.1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
+    <style>
+        li{
+            list-style: none;
+            height: 30px;
+            line-height: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <input type="text" id="inputBox" v-model="keyWord" @keyup="getList"/>
+        <ul>
+            <li v-for="item in list" >{{ item }}</li>
+        </ul>
+    </div>
+    
+    <script>
+        new Vue({
+            el:"#app",
+            data:{
+                keyWord:"",
+                list:[]
+            },
+            methods:{
+                getList(){
+                    let _this = this;
+                    $.ajax({
+                        url:'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd='+this.keyWord+'&json=1&p=3',
+                        dataType: 'jsonp',
+                        jsonp:'cb',
+                        type:'POST',
+                        success:function(data){
+                            _this.list = data.s
+                        }
+                    })
+                }
+            }
+        })
+    </script>
+</body>
+</html>
