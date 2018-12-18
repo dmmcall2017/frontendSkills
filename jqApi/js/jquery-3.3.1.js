@@ -176,10 +176,9 @@
 
 			// Build a new jQuery matched element set
 			var ret = jQuery.merge(this.constructor(), elems);
-
+			
 			// Add the old object onto the stack (as a reference)
 			ret.prevObject = this;
-
 			// Return the newly-formed element set
 			return ret;
 		},
@@ -196,6 +195,8 @@
 		},
 
 		slice: function () {
+			console.log(this)
+			console.log(slice.apply(this, arguments))
 			return this.pushStack(slice.apply(this, arguments));
 		},
 
@@ -213,6 +214,7 @@
 			return this.pushStack(j >= 0 && j < len ? [this[j]] : []);
 		},
 
+		//获取栈中当前元素的前一个元素，链式调用
 		end: function () {
 			return this.prevObject || this.constructor();
 		},
@@ -262,6 +264,7 @@
 					copy = options[name];
 
 					// Prevent never-ending loop
+					//防止循环引用.0
 					if (target === copy) {
 						continue;
 					}
@@ -272,6 +275,7 @@
 
 						if (copyIsArray) {
 							copyIsArray = false;
+							//原来的属性不会被覆盖
 							clone = src && Array.isArray(src) ? src : [];
 
 						} else {
@@ -2934,10 +2938,12 @@
 					match = rquickExpr.exec(selector);
 				}
 
-				// Match html or make sure no context is specified for #id
+				//标签或者ID
+				//context只能是document，当前window或者iframe的document
 				if (match && (match[1] || !context)) {
 
 					// HANDLE: $(html) -> $(array)
+					//创建标签
 					if (match[1]) {
 						context = context instanceof jQuery ? context[0] : context;
 
@@ -2945,11 +2951,13 @@
 						// Intentionally let the error be thrown if parseHTML is not present
 						jQuery.merge(this, jQuery.parseHTML(
 							match[1],
-							context && context.nodeType ? context.ownerDocument || context : document,
-							true
+							context && context.nodeType ? context.ownerDocument || context : document,//一般不传context，就是document
+							true//script标签也可以添加进去
 						));
 
 						// HANDLE: $(html, props)
+						//eg.$("<li>",{title:'li',html:'aaaa'})//$("<li></li>",{title:'li',html:'aaaa'})
+						//只能匹配单标签
 						if (rsingleTag.test(match[1]) && jQuery.isPlainObject(context)) {
 							for (match in context) {
 
@@ -2969,16 +2977,13 @@
 						// HANDLE: $(#id)
 					} else {
 						elem = document.getElementById(match[2]);
-
 						if (elem) {
-
 							// Inject the element directly into the jQuery object
 							this[0] = elem;
 							this.length = 1;
 						}
 						return this;
 					}
-
 					// HANDLE: $(expr, $(...))
 				} else if (!context || context.jquery) {
 					return (context || root).find(selector);
@@ -2997,10 +3002,10 @@
 
 				// HANDLE: $(function)
 				// Shortcut for document ready
+				//$(function())
 			} else if (isFunction(selector)) {
 				return root.ready !== undefined ?
 					root.ready(selector) :
-
 					// Execute immediately if ready is not present
 					selector(jQuery);
 			}
@@ -9805,6 +9810,7 @@
 	// context (optional): If specified, the fragment will be created in this context,
 	// defaults to document
 	// keepScripts (optional): If true, will include scripts passed in the html string
+	//字符串转换为节点数组
 	jQuery.parseHTML = function (data, context, keepScripts) {
 		if (typeof data !== "string") {
 			return [];

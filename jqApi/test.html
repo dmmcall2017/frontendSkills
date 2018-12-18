@@ -21,8 +21,22 @@
         /**
          *$("#id")返回一个dom数组 
          */
-        console.log($("#myEle"))
+        // console.log($("#myEle"))
         // console.log($("<span>"))
+
+    function aa(){
+        console.log("aaa");
+    } 
+        var a = new aa();
+        console.log(a.constructor)
+        var obj = {
+            constructor:aa,
+            age:10,
+            name:"dddd"
+        }
+        aa.prototype = obj;
+        var b = new aa();
+        console.log(b.constructor)
     </script>
 </body>
 

@@ -71,6 +71,7 @@
     jQuery.fn = jQuery.prototype = {
         //当前版本号
         jquery: version,
+        //new fn() 默认生成constructor，指向jQUery，prototype被覆盖，constructor就会被改变，要重新修正
         constructor: jQuery,
         //定义length属性，便于转化为类数组
         /**
