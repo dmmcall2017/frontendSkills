@@ -85,6 +85,10 @@
         }
     }
     //jQuery和jQuery.fn上的扩展函数
+    //拷贝继承
+    /**
+     * js继承方式
+     */
     jQuery.extend = jQuery.fn.extend = function() {
         var options, name, src, copy, copyIsArray, clone,
             target = arguments[ 0 ] || {},
