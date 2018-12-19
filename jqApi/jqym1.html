@@ -3,36 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="js/jquery-2.0.3.js"></script>
+    <script src="js/jquery-3.3.1.js"></script>
 
 </head>
 <body>
     <div id="log"></div>
     <script>
-        var log = function( value ){
-            $("#log").append( "<p>" + value + "</p>" );
-        };
+        //继承方式
+        //1.原型继承
+        function Foo(age,type){
+            this.age = age;
+            this.type = type;
+            this.setType = function(type) {
+                this.type = type;
+            }
+            return this;
+        }
 
-        var foo = function( value ){
-            log( "foo: " + value );
-        };
-        var bar = function( value ){
-            log( "bar: " + value );
-        };
+        Foo.prototype.getAge = function(){
+            this.data = "hahah"
+            console.log(this)
+            return this;
+        }
 
-        var callbacks = $.Callbacks( "memory" );
-        callbacks.add( foo );
-        callbacks.fire( "hello" );
-
-        callbacks.disable();
-        callbacks.fire( "world" );
-
-        callbacks.add( foo );
-        callbacks.fire( "silentArgument" );
-
-        callbacks.add(bar);
-        callbacks.fire( "youHadMeAtHello" );
-
+        var foo1 = new Foo(10,"dmm");
+        var foo2 = new Foo(12,"dmm2");
+        console.log(foo1,foo2);
+        foo1.getAge();
+        console.log(foo1);
+        console.log(foo2.__proto__.getAge());
     </script>
 </body>
 </html>
