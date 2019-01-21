@@ -1,3 +1,39 @@
+//工具类
+const utils = {
+    //排序类型对应的name
+    sortTypeName:{
+        "insertSort":"插入排序",
+        "selectionSort":"选择排序",
+        "shellSort":"希尔排序",
+        "mergeSort":"归并排序",
+        "quickSort":"快速排序",
+        "quickSort1":"快速排序2",
+        "sortTest":"测试"
+    },
+    //交换位置的函数
+    swap(arr,index1,index2){
+        let temp = arr[index1];
+        arr[index1] = arr[index2];
+        arr[index2] = temp;
+    },
+    //生成测试数组
+    getRandArr:function(n,rangL,rangR){
+        let arr = [];
+        for(let i=0;i<n;i++){
+            arr[i] = parseInt(Math.random()*(rangR-rangL)+rangL);
+        }
+        return arr;
+    },
+    //测试函数
+    test:function(sortType){
+        let start = new Date().getTime();
+        // console.log(sortType(utils.getRandArr(10,1,1000),0,10));
+        sortType(utils.getRandArr(30000,1,1000),0,30000);
+        let end = new Date().getTime();
+        console.log(utils.sortTypeName[sortType.name]+"-用时：",end-start,"ms");
+    }
+}
+
 //选择排序
 function selectionSort(arr){
     const len = arr.length;
@@ -94,48 +130,37 @@ function quickSort(arr){
 　　}
 　　return quickSort(left).concat([pivot], quickSort(right));
 }
-function quickSortPartition(arr,l,n){
 
+//自己写的快速排序
+function quickSort1(arr,low,high){
+    if(low>=high)return arr;
+    //切分值的索引
+    let j = partition(arr,low,high);
+    //递归，j之前的都比arr[j]小，之后的都比arr[j]大
+    quickSort1(arr,low,j);
+    quickSort1(arr,j+1,high);
+    return arr;
 }
-
-//工具类
-const utils = {
-    //排序类型对应的name
-    sortTypeName:{
-        "insertSort":"插入排序",
-        "selectionSort":"选择排序",
-        "shellSort":"希尔排序",
-        "mergeSort":"归并排序",
-        "quickSort":"快速排序",
-        "sortTest":"测试"
-    },
-    //交换位置的函数
-    swap(arr,index1,index2){
-        let temp = arr[index1];
-        arr[index1] = arr[index2];
-        arr[index2] = temp;
-    },
-    //生成测试数组
-    getRandArr:function(n,rangL,rangR){
-        let arr = [];
-        for(let i=0;i<n;i++){
-            arr[i] = parseInt(Math.random()*(rangR-rangL)+rangL);
-        }
-        return arr;
-    },
-    //测试函数
-    test:function(sortType){
-        let start = new Date().getTime();
-        // console.log(sortType(utils.getRandArr(10,1,100)));
-        sortType(utils.getRandArr(10000,1,1000));//
-        let end = new Date().getTime();
-        console.log(utils.sortTypeName[sortType.name]+"-用时：",end-start,"ms");
+//获取切分值
+function partition(arr,low,high){
+    let pviot = arr[low];
+    let len = high-low+1;
+    let i=low,j=high,k;
+    while(true){
+        while(arr[++i]<pviot)if(i==high)break;
+        while(arr[--j]>pviot)if(j==low)break;
+        if(i>=j)break;
+        utils.swap(arr,i,j);
     }
+    utils.swap(arr,low,j);
+    return j;
 }
 
 
-utils.test(selectionSort);
-utils.test(insertSort);
-utils.test(shellSort);
-utils.test(mergeSort);
-utils.test(quickSort);
+
+utils.test(selectionSort);//选择排序
+utils.test(insertSort);//插入排序
+utils.test(shellSort);//希尔排序
+utils.test(mergeSort);//合并排序
+utils.test(quickSort);//快速排序
+utils.test(quickSort1);//新快速排序
