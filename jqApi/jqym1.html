@@ -28,6 +28,8 @@
 
         var foo1 = new Foo(10,"dmm");
         var foo2 = new Foo(12,"dmm2");
+        var foo3 = {};
+        foo3.__proto__ = Foo.prototype;
         console.log(foo1,foo2);
         foo1.getAge();
         console.log(foo1);

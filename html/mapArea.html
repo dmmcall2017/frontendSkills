@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        a{
+            text-decoration: none;
+            color: #666666;
+        }
+        .book-title{
+            position: relative;
+        }
+        .imgCover{
+            position: absolute;
+            width: 65px;
+            height: 23px;
+        }
+    </style>
+</head>
+<body>
+    <!--
+        usemap是img的属性
+        map+area实现链接嵌套，不能添加太多样式
+    -->
+    <a href="https://www.baidu.com" target="__blank">
+        <img src="../images/90.jpg" alt="都市猎人 限时免费" usemap="#bookCover">
+        <map name="bookCover" id="bookCover">
+            <area shape="rect" coords="0,0,54,72" href="https://www.google.com/" alt="" target="__blank">
+        </map>
+        <div class="book-cell">
+            <div class="book-title-x">
+                <h4 class="book-title" usemap="#mapTitle">
+                    <img usemap="#mapTitle" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="imgCover">
+                    都市猎人
+                </h4>
+                <map name="mapTitle" id="mapTitle">
+                    <area shape="rect" coords="0,0,54,72" href="https://baike.baidu.com/item/%E9%83%BD%E5%B8%82%E7%8C%8E%E4%BA%BA/80111?fr=aladdin" target="__blank" class="area">
+                </map>
+                <div class="book-title-r">继续阅读</div>
+            </div>
+            <div class="book-meta">都市猎人 | 读至第六百四十二章 不在意</div>
+            <div class="book-meta">
+                <time class="book-meta-r">1天前</time>更新至 第六百四十二章
+            </div>
+        </div>
+    </a>
+</body>
+</html>
