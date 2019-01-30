@@ -27,7 +27,9 @@ const utils = {
     //测试函数
     test:function(sortType){
         let start = new Date().getTime();
-        // console.log(sortType(utils.getRandArr(10,1,1000),0,10));
+        //测试排序算法是否正确
+        // console.log(sortType(utils.getRandArr(10,1,1000),0,10));//
+        //测试排序所用时间
         sortType(utils.getRandArr(30000,1,1000),0,30000);
         let end = new Date().getTime();
         console.log(utils.sortTypeName[sortType.name]+"-用时：",end-start,"ms");
@@ -114,6 +116,10 @@ function mergeSort(arr){
 
 //简单的快速排序
 //遍历数组找到元素在排序之后的索引
+/**
+ * 原来出自阮一峰
+ * @param {} arr 
+ */
 function quickSort(arr){
     if (arr.length <= 1) { return arr; }
     let len = arr.length;
