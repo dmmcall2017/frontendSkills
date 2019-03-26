@@ -1,4 +1,4 @@
-exports = {
+module.exports = {
     init(){
         console.log("初始化函数")
     },
