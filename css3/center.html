@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>居中</title>
+    <style>
+        html,body {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+        }
+        .container {
+            width: 400px;
+            height: 800px;
+            background: #a2a9b6;
+            text-align: center;
+        }
+        .container:after {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 100%;
+            vertical-align: middle;
+            overflow: hidden;
+        }
+        .box1 {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(rebeccapurple, burlywood);
+            margin: 0 auto;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .box2 {
+            position: relative;
+            height: 300px;
+            background: rgba(0,0,0,.2);
+            margin-top: 10px;
+        }
+        .box21 {
+            position:absolute;
+            width: 100px;
+            height: 100px;
+            background: #fff;
+            transform: translate(-50%,-50%);
+            top: 50%;
+            left: 50%;
+            border: 1px solid #000;
+        }
+        .sticky {
+            position: sticky;
+            top: 50px;
+        }
+
+        .box3 {
+            position: relative;
+            width: 600px;
+            height: 200px;
+            background: #2486ff;
+        }
+        .box31 {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: #cccccc;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            margin: auto;
+        }
+        .box4 {
+            display: flex;
+            width: 600px;
+            height: 200px;
+            background: #d9480f;
+        }
+        .box41 {
+            width: 100px;
+            height: 100px;
+            background: aquamarine;
+            margin: auto;
+        }
+        .bg_box {
+            width: 300px;
+            height: 300px;
+            margin-top: 20px;
+            background-color: #BBBBBB;
+        }
+        /*方法二*/
+        .p_box {
+            line-height: 300px;
+        }
+        .words_p {
+            display: inline-block;
+            line-height: 20px;  /*单独给子元素设置行高，覆盖父级元素的行高*/
+            vertical-align: middle;  /*基线居中对齐*/
+        }
+    </style>
+</head>
+<body>
+<p class="sticky">sjgjbcjgcjbczsczcs</p>
+    <div class="container">
+        <div class="box1">
+            利用伪类上下左右居中
+        </div>
+    </div>
+    <h5>多行文本垂直居中</h5>
+<div class="p_box bg_box">
+    <p class="words_p">
+        方法二：对子元素设置display:inline-block属性，使其转化成行内块元素，模拟成单行文本。父元素设置对应的height和line-height。对子元素设置vertical-align:middle属性，使其基线对齐。添加line-height属性，覆盖继承自父元素的行高。缺点：文本的高度不能超过外部盒子的高度。
+    </p>
+</div>
+    <h5>弹性盒子水平垂直居中</h5>
+    <div class="box4">
+        <div class="box41"></div>
+    </div>
+    <h5>绝对定位元素水平垂直居中2</h5>
+    <div class="box3">
+        <div class="box31"></div>
+    </div>
+    <h5>绝对定位元素水平垂直居中1</h5>
+    <div class="box2">
+        <div class="box21"></div>
+    </div>
+
+</body>
+</html>
