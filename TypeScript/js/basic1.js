@@ -1,3 +1,4 @@
+"use strict";
 var isDone = false;
 console.log(isDone);
 var list = [1, 2, 3];
